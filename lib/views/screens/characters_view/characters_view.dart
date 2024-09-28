@@ -1,8 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rickandmorty/views/widgets/character_cardview.dart';
 
-class CharactersView extends StatelessWidget {
+import 'characters_viewmodel.dart';
+
+class CharactersView extends StatefulWidget {
   const CharactersView({super.key});
+
+  @override
+  State<CharactersView> createState() => _CharactersViewState();
+}
+
+class _CharactersViewState extends State<CharactersView> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<CharactersViewmodel>().getCharacters();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,22 +27,26 @@ class CharactersView extends StatelessWidget {
           child: Column(
             children: [
               _searchInputWidget(context),
-              const CharacterCardView(
-                image:
-                    'https://rickandmortyapi.com/api/character/avatar/600.jpeg',
-                name: 'Rick Sanchez',
-                origin: 'Earth (C-137)',
-                status: 'Yaşıyor',
-                type: 'İnsan',
-              ),
-              const CharacterCardView(
-                image:
-                    'https://rickandmortyapi.com/api/character/avatar/600.jpeg',
-                name: 'Rick Sanchez',
-                origin: 'Earth (C-137)',
-                status: 'Yaşıyor',
-                type: 'İnsan',
-              ),
+              Consumer<CharactersViewmodel>(
+                builder: (context, viewModel, child) {
+                  if (viewModel.charactersModel == null) {
+                    return const CircularProgressIndicator.adaptive();
+                  } else {
+                    return Flexible(
+                      child: ListView.builder(
+                        itemCount: viewModel.charactersModel!.characters.length,
+                        itemBuilder: (context, index) {
+                          final characterModel =
+                              viewModel.charactersModel!.characters[index];
+                          return CharacterCardView(
+                            characterModel: characterModel,
+                          );
+                        },
+                      ),
+                    );
+                  }
+                },
+              )
             ],
           ),
         ),

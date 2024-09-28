@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:rickandmorty/models/characters_model.dart';
 
 class CharacterCardView extends StatelessWidget {
-  final String image;
-  final String name;
-  final String origin;
-  final String status;
-  final String type;
+  final CharacterModel characterModel;
   const CharacterCardView({
     super.key,
-    required this.image,
-    required this.name,
-    required this.origin,
-    required this.status,
-    required this.type,
+    required this.characterModel,
   });
 
   @override
@@ -33,7 +26,7 @@ class CharacterCardView extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(6),
                   child: Image.network(
-                    image,
+                    characterModel.image,
                     height: 100,
                   ),
                 ),
@@ -44,16 +37,20 @@ class CharacterCardView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        name,
+                        characterModel.name,
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                       const SizedBox(height: 5),
-                      _infoWidget(type: 'Köken', value: origin),
+                      _infoWidget(
+                          type: 'Köken', value: characterModel.origin.name),
                       const SizedBox(height: 4),
-                      _infoWidget(type: 'Durum', value: '$status - $type'),
+                      _infoWidget(
+                          type: 'Durum',
+                          value:
+                              '${characterModel.status} - ${characterModel.species}'),
                     ],
                   ),
                 )
