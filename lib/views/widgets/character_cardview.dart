@@ -1,12 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:rickandmorty/app/locator.dart';
 import 'package:rickandmorty/models/characters_model.dart';
+import 'package:rickandmorty/services/preferences_service.dart';
 
-class CharacterCardView extends StatelessWidget {
+class CharacterCardView extends StatefulWidget {
   final CharacterModel characterModel;
-  const CharacterCardView({
+  bool isFavorited;
+  CharacterCardView({
     super.key,
     required this.characterModel,
+    this.isFavorited = false,
   });
+
+  @override
+  State<CharacterCardView> createState() => _CharacterCardViewState();
+}
+
+class _CharacterCardViewState extends State<CharacterCardView> {
+  void _favoriteCharacter() {
+    if (widget.isFavorited) {
+      locator<PreferencesService>().removeCharacter(widget.characterModel.id);
+      widget.isFavorited = false;
+    } else {
+      locator<PreferencesService>().saveCharacter(widget.characterModel.id);
+      widget.isFavorited = true;
+    }
+
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +47,7 @@ class CharacterCardView extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(6),
                   child: Image.network(
-                    characterModel.image,
+                    widget.characterModel.image,
                     height: 100,
                   ),
                 ),
@@ -37,7 +58,7 @@ class CharacterCardView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        characterModel.name,
+                        widget.characterModel.name,
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -45,12 +66,13 @@ class CharacterCardView extends StatelessWidget {
                       ),
                       const SizedBox(height: 5),
                       _infoWidget(
-                          type: 'Köken', value: characterModel.origin.name),
+                          type: 'Köken',
+                          value: widget.characterModel.origin.name),
                       const SizedBox(height: 4),
                       _infoWidget(
                           type: 'Durum',
                           value:
-                              '${characterModel.status} - ${characterModel.species}'),
+                              '${widget.characterModel.status} - ${widget.characterModel.species}'),
                     ],
                   ),
                 )
@@ -58,8 +80,9 @@ class CharacterCardView extends StatelessWidget {
             ),
           ),
           IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.bookmark_border),
+            onPressed: _favoriteCharacter,
+            icon: Icon(
+                widget.isFavorited ? Icons.bookmark : Icons.bookmark_border),
           )
         ],
       ),
