@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:rickandmorty/app/locator.dart';
 import 'package:rickandmorty/models/characters_model.dart';
@@ -9,12 +7,12 @@ import 'character_cardview.dart';
 
 class CharacterCardListView extends StatefulWidget {
   final List<CharacterModel> characters;
-  final VoidCallback onLoadMore;
+  final VoidCallback? onLoadMore;
   final bool loadMore;
   const CharacterCardListView({
     super.key,
     required this.characters,
-    required this.onLoadMore,
+    this.onLoadMore,
     this.loadMore = false,
   });
 
@@ -46,15 +44,18 @@ class _CharacterCardListViewState extends State<CharacterCardListView> {
   }
 
   void _detectScrollBottom() {
-    _scrollController.addListener(() {
+    if (widget.onLoadMore != null) {
+       _scrollController.addListener(() {
       final maxScroll = _scrollController.position.maxScrollExtent;
       final currentPosition = _scrollController.position.pixels;
       const int delta = 200;
 
       if (maxScroll - currentPosition <= delta) {
-        widget.onLoadMore();
+        widget.onLoadMore!();
       }
     });
+    }
+
   }
 
   @override
@@ -71,7 +72,8 @@ class _CharacterCardListViewState extends State<CharacterCardListView> {
             final bool isFavorited = _favoritedList.contains(characterModel.id);
             return Column(
               children: [
-                CharacterCardView(characterModel: characterModel, isFavorited: isFavorited),
+                CharacterCardView(
+                    characterModel: characterModel, isFavorited: isFavorited),
                 if (widget.loadMore && index == widget.characters.length - 1)
                   const CircularProgressIndicator.adaptive()
               ],
