@@ -28,36 +28,32 @@ class _LocationsViewState extends State<LocationsView> {
           title: 'Konumlar',
           transparentBackground: true,
         ),
-        body: Center(
-          child: DecoratedContainer(
-            topChild: const SizedBox(height: 74),
-            child: _locationListView(),
-          ),
+        body: DecoratedContainer(
+          topChild: const SizedBox(height: 74),
+          child: _locationListView(),
         ),
       ),
     );
   }
 
-  Flexible _locationListView() {
-    return Flexible(
-      child: Consumer<LocationViewmodel>(
-        builder: (context, viewModel, child) {
-          if (viewModel.locationModel == null) {
-            return const Center(
-              child: CircularProgressIndicator.adaptive(),
-            );
-          } else {
-            return Padding(
-              padding: const EdgeInsets.only(top: 30),
-              child: LocationListView(
-                locationModel: viewModel.locationModel!,
-                onLoadMore: viewModel.getMoreLocation,
-                loadMore: viewModel.loadMore,
-              ),
-            );
-          }
-        },
-      ),
+  Widget _locationListView() {
+    return Consumer<LocationViewmodel>(
+      builder: (context, viewModel, child) {
+        if (viewModel.locationModel == null) {
+          return const Center(
+            child: CircularProgressIndicator.adaptive(),
+          );
+        } else {
+          return Padding(
+            padding: const EdgeInsets.only(top: 30),
+            child: LocationListView(
+              locationModel: viewModel.locationModel!,
+              onLoadMore: viewModel.getMoreLocation,
+              loadMore: viewModel.loadMore,
+            ),
+          );
+        }
+      },
     );
   }
 }

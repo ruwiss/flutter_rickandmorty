@@ -28,6 +28,15 @@ class ApiService {
     }
   }
 
+  Future<EpisodesModel> getAllEpisodes({String? url}) async {
+    try {
+      final response = await _dio.get(url ?? '/episode');
+      return EpisodesModel.fromMap(response.data);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<List<EpisodeModel>> getMultipleEpisodes(List<String> list) async {
     try {
       final List<String> episodeNumbers =
@@ -49,6 +58,17 @@ class ApiService {
     try {
       final response = await _dio.get(url ?? '/location');
       return LocationModel.fromMap(response.data);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<CharacterModel>> getCharactersFromUrlList(
+      List<String> residentsUrl) async {
+    final List<int> idList =
+        residentsUrl.map((e) => int.parse(e.split('/').last)).toList();
+    try {
+      return await getMultipleCharacters(idList);
     } catch (e) {
       rethrow;
     }

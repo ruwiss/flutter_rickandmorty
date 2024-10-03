@@ -4,6 +4,7 @@ import 'package:rickandmorty/models/characters_model.dart';
 import 'package:rickandmorty/models/episode_model.dart';
 import 'package:rickandmorty/views/widgets/appbar_widget.dart';
 import 'package:rickandmorty/views/widgets/decorated_container.dart';
+import 'package:rickandmorty/views/widgets/episodes_listview.dart';
 
 import 'character_profile_viewmodel.dart';
 
@@ -56,36 +57,7 @@ class _CharacterProfileViewState extends State<CharacterProfileView> {
     return Flexible(
       child: Consumer<CharacterProfileViewmodel>(
         builder: (context, viewModel, child) {
-          return ListView.separated(
-            padding: EdgeInsets.zero,
-            itemCount: viewModel.episodes.length,
-            itemBuilder: (context, index) {
-              final EpisodeModel model = viewModel.episodes[index];
-              return ListTile(
-                leading: const Icon(
-                  Icons.face_retouching_natural,
-                  size: 36,
-                ),
-                trailing: const Icon(Icons.keyboard_arrow_right),
-                title: Text(
-                  model.episode,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                subtitle: Text(
-                  model.name,
-                  style: const TextStyle(fontSize: 12),
-                ),
-              );
-            },
-            separatorBuilder: (context, index) => Divider(
-              color: Theme.of(context).colorScheme.tertiary,
-              indent: 30,
-              endIndent: 30,
-              height: 0,
-            ),
-          );
+          return EpisodesListView(episodes: viewModel.episodes);
         },
       ),
     );

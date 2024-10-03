@@ -52,17 +52,26 @@ class _CharactersViewState extends State<CharactersView> {
         textInputAction: TextInputAction.search,
         onFieldSubmitted: viewModel.getCharactersByName,
         decoration: InputDecoration(
-          hintText: 'Karakterlerde Ara',
-          hintStyle: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
-          border: const OutlineInputBorder(),
-          prefixIcon: const Icon(Icons.search),
-          suffixIcon: IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.more_vert),
-          ),
-        ),
+            hintText: 'Karakterlerde Ara',
+            hintStyle: TextStyle(
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+            border: const OutlineInputBorder(),
+            prefixIcon: const Icon(Icons.search),
+            suffixIcon: PopupMenuButton(
+              icon: const Icon(Icons.more_vert),
+              onSelected: viewModel.onCharacterTypeChanged,
+              itemBuilder: (context) {
+                return CharacterType.values
+                    .map(
+                      (e) => PopupMenuItem<CharacterType>(
+                        value: e,
+                        child: Text(e.name),
+                      ),
+                    )
+                    .toList();
+              },
+            )),
       ),
     );
   }
