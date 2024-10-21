@@ -24,6 +24,14 @@ import 'package:rickandmorty/views/screens/settings_view/settings_viewmodel.dart
 import '../views/screens/settings_view/settings_view.dart';
 
 final _routerKey = GlobalKey<NavigatorState>();
+final _shellNavigatorCharactersKey =
+    GlobalKey<NavigatorState>(debugLabel: 'shellCharacters');
+final _shellNavigatorFavouritesKey =
+    GlobalKey<NavigatorState>(debugLabel: 'shellFavourites');
+final _shellNavigatorLocationsKey =
+    GlobalKey<NavigatorState>(debugLabel: 'shellLocations');
+final _shellNavigatorSectionsKey =
+    GlobalKey<NavigatorState>(debugLabel: 'shellSections');
 
 class AppRoutes {
   AppRoutes._();
@@ -49,10 +57,12 @@ final router = GoRouter(
   initialLocation: AppRoutes.characters,
   routes: [
     StatefulShellRoute.indexedStack(
-      builder: (context, state, navigationShell) =>
-          AppView(navigationShell: navigationShell),
+      builder: (context, state, navigationShell) {
+        return AppView(navigationShell: navigationShell);
+      },
       branches: [
         StatefulShellBranch(
+          navigatorKey: _shellNavigatorCharactersKey,
           routes: [
             GoRoute(
               path: AppRoutes.characters,
@@ -75,6 +85,7 @@ final router = GoRouter(
           ],
         ),
         StatefulShellBranch(
+          navigatorKey: _shellNavigatorFavouritesKey,
           routes: [
             GoRoute(
               path: AppRoutes.favourites,
@@ -86,6 +97,7 @@ final router = GoRouter(
           ],
         ),
         StatefulShellBranch(
+          navigatorKey: _shellNavigatorLocationsKey,
           routes: [
             GoRoute(
               path: AppRoutes.locations,
@@ -108,6 +120,7 @@ final router = GoRouter(
           ],
         ),
         StatefulShellBranch(
+          navigatorKey: _shellNavigatorSectionsKey,
           routes: [
             GoRoute(
               path: AppRoutes.sections,

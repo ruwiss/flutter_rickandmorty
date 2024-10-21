@@ -5,6 +5,13 @@ class AppView extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
   const AppView({super.key, required this.navigationShell});
 
+  void _goBranch(int index) {
+    navigationShell.goBranch(
+      index,
+      initialLocation: index == navigationShell.currentIndex,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +29,7 @@ class AppView extends StatelessWidget {
         child: NavigationBar(
           selectedIndex: navigationShell.currentIndex,
           indicatorColor: Colors.transparent,
-          onDestinationSelected: navigationShell.goBranch,
+          onDestinationSelected: _goBranch,
           destinations: [
             _menuItem(
               context,
@@ -75,5 +82,4 @@ class AppView extends StatelessWidget {
       label: label,
     );
   }
-
 }
